@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="2">
+	<testsuite name="github.com/datatrails/forestrie/go-forestrie/demos/tools" tests="2" failures="0" errors="0" id="0" hostname="pop-os" time="1.029" timestamp="2024-05-17T16:50:40+01:00">
+		<properties>
+			<property name="coverage.statements.pct" value="13.20"></property>
+		</properties>
+		<testcase name="TestLogVersion0Hash" classname="github.com/datatrails/forestrie/go-forestrie/demos/tools" time="0.000"></testcase>
+		<testcase name="TestLogVersion0Hash/positive_(kat)" classname="github.com/datatrails/forestrie/go-forestrie/demos/tools" time="0.000"></testcase>
+		<system-out><![CDATA[2024/05/17 16:50:39 INFO memory is not limited, skipping: %v package=github.com/KimMachineGun/automemlimit/memlimit !BADKEY="memory is not limited"]]></system-out>
+	</testsuite>
+</testsuites>
