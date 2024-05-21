@@ -1,6 +1,9 @@
 name: Quality Control
 
-on: [pull_request]
+on: [
+  pull_request,
+  workflow_dispatch
+]
 
 jobs:
   build:
@@ -8,36 +11,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
           cache: false
-      - name: Check formatting
-        uses: Jerome1337/gofmt-action@v1.0.5
-        with:
-          gofmt-path: './'
-          gofmt-flags: '-l -d'
-      - name: Check imports
-        uses: DarthBenro008/goimports-check-action@v0.1.0
-        with:
-          root-path: './'
-      - name: go vet
+
+      - name: Install Go quality tools
         run: |
-          go vet ./...
-      - name: Lint checks
-        uses: golangci/golangci-lint-action@v3
-        with:
-          # Require: The version of golangci-lint to use.
-          # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
-          # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          version: v1.56
+          go install golang.org/x/tools/cmd/goimports@v0.1.7
+          go install github.com/axw/gocov/gocov@v1.1.0
+          go install github.com/jstemmer/go-junit-report/v2@v2.1.0
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.56.2
+
       - name: Install Task
         uses: arduino/setup-task@v1
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and Test
-        run: |
-          task build
-          task test
 
+      - name: Code quality checks
+        run: |
+          # Note: it is by design that we don't use the builder
+          task format
+          task lint
+
+      - name: Unit tests
+        run: |
+          # Note: it is by design that we don't use the builder
+          task test:unit
+
+      # - name: Integration tests
+      #   run: |
+      #     task test:integration
+
+      # - name:  Azurite logs
+      #   run: |
+      #     task azurite:logs
+
+      # - name: Stop azurite
+      #   if: always()
+      #   run: |
+      #     task azurite:stop

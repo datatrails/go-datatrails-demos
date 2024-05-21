@@ -1,0 +1,178 @@
+---
+# Tests written using go lang's 'go test' framework. Includes unit and integration tests
+
+version: '3'
+
+# Environment variables set for all commands.
+env_build: &env_build
+  # XDG_CACHE_HOME: This may need to be set for python builds, but try to use
+  # virtual env instead.
+
+  # The GOCACHE in a linux container on Docker for windows MUST be on a linuxy
+  # file system
+  GOCACHE: /tmp/jitsuin/forestrie
+
+vars:
+  UNITTEST_DIR: test_results
+  VERBOSE: ""
+
+tasks:
+
+  go:azurite:
+    desc: "run integration tests which depend only on azurite"
+    dir: ../go-forestrie
+    vars:
+      # empty or -tag tag1,tag2 ...
+      GO_TEST_TAGS: '{{.GO_TEST_TAGS | default "-tags integration,azurite"}}'
+      GO_MOD_DIRS:
+        sh: find . -type f -name 'go.mod'
+
+    cmds:
+      - for: { var: GO_MOD_DIRS}
+        cmd: |
+          cd $(dirname {{.ITEM}})
+          mkdir -p {{.UNITTEST_DIR}}
+
+          go test \
+            {{.GO_TEST_TAGS}} \
+            -race \
+            -v \
+            -coverprofile={{.UNITTEST_DIR}}/main.out \
+            ./... \
+            2>&1 | go-junit-report -set-exit-code -debug.print-events > {{.UNITTEST_DIR}}/main.xml
+
+          gocov convert {{.UNITTEST_DIR}}/main.out > {{.UNITTEST_DIR}}/coverage.json
+
+  go:unit:
+    desc: "run unit tests"
+    dir: ../go-forestrie
+    vars:
+      GO_TEST_TAGS: '{{.GO_TEST_TAGS | default ""}}'
+      GO_MOD_DIRS:
+        sh: find . -type f -name 'go.mod'
+    cmds:
+      - for: { var: GO_MOD_DIRS}
+        cmd: |
+          cd $(dirname {{.ITEM}})
+          mkdir -p {{.UNITTEST_DIR}}
+
+          go test \
+            {{.GO_TEST_TAGS}} \
+            -race \
+            -v \
+            -coverprofile={{.UNITTEST_DIR}}/main.out \
+            ./... \
+            2>&1 | go-junit-report -set-exit-code -debug.print-events > {{.UNITTEST_DIR}}/main.xml
+
+          gocov convert {{.UNITTEST_DIR}}/main.out > {{.UNITTEST_DIR}}/coverage.json
+
+  go:system:preflight:
+    desc: sets up the local environment for running the go system tests
+    dir: .
+    vars:
+      VALUE_CHAIN_TF:
+        sh: task --silent tf:output:valuechain VALUE_CHAIN={{.VALUE_CHAIN}} ENVIRONMENT={{.ENVIRONMENT}} | jq .
+      FORESTRIE_TF:
+        sh: task --silent tf:output:forestrie SUBSYSTEM_INSTANCE={{.SUBSYSTEM_INSTANCE}} ENVIRONMENT={{.ENVIRONMENT}} | jq .
+      CLUSTER:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).cluster_name.value}}
+      # note you need avid deployed via helm in order to get the helm values
+      HELM_VALUES:
+        sh: helm --kube-context {{.CLUSTER}} get values -n {{.RELEASE}} {{.RELEASE}} -o json --all | jq .
+      FQDN:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).FQDN.value}}
+      TEST_IDP_KEY:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).testidp_backend_api_key.value}}
+      MERKLELOG_ACCOUNT_URL:
+        sh: echo {{(fromJson .FORESTRIE_TF).blob_storage_endpoint.value}}
+      MERKLELOG_URL_PREFIX:
+        sh: echo {{(fromJson .FORESTRIE_TF).blob_proxy_path_prefix.value}}
+      PUBLIC_TENANT_ID:
+        sh: echo {{(fromJson .HELM_VALUES).global.terraform.public_tenant_id}}
+      PUBLIC_KEY:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).merkle_log_signer_public_key.value}}
+    cmd: |
+
+      echo FQDN:{{.FQDN}}
+      echo TEST_IDP_KEY:{{.TEST_IDP_KEY}}
+      echo MERKLELOG_ACCOUNT_URL:{{.MERKLELOG_ACCOUNT_URL}}
+      echo MERKLELOG_URL_PREFIX:{{.MERKLELOG_URL_PREFIX}}
+      echo PUBLIC_TENANT_ID:{{.PUBLIC_TENANT_ID}}
+
+      export FQDN={{.FQDN}}
+      export TEST_IDP_KEY={{.TEST_IDP_KEY}}
+      export MERKLELOG_ACCOUNT_URL={{.MERKLELOG_ACCOUNT_URL}}
+      export MERKLELOG_URL_PREFIX={{.MERKLELOG_URL_PREFIX}}
+      export PUBLIC_TENANT_ID={{.PUBLIC_TENANT_ID}}
+
+
+  go:system:build:
+    desc: "builds the go test binary for the system tests"
+    dir: ../go-forestrie/systests
+    vars:
+      # empty or -tag tag1,tag2 ...
+      GO_TEST_TAGS: '{{.GO_TEST_TAGS | default "--tags systemtest"}}'
+    cmd: |
+      go test \
+        {{.GO_TEST_TAGS}} \
+        -race \
+        -cover \
+        -c \
+        ./...
+
+  go:system:run:
+    desc: "run system tests which depend on a deployed system, Note: to run, need deployed iam, avid and forestrie subsystems and task systemtest:preflight needs to have been run at least once."
+    dir: ../go-forestrie/systests
+    vars:
+      # empty or -tag tag1,tag2 ...
+      GO_TEST_TAGS: '{{.GO_TEST_TAGS | default "--tags systemtest"}}'
+      VALUE_CHAIN_TF:
+        sh: task --silent tf:output:valuechain VALUE_CHAIN={{.VALUE_CHAIN}} ENVIRONMENT={{.ENVIRONMENT}} | jq .
+      FORESTRIE_TF:
+        sh: task --silent tf:output:forestrie SUBSYSTEM_INSTANCE={{.SUBSYSTEM_INSTANCE}} ENVIRONMENT={{.ENVIRONMENT}} | jq .
+      CLUSTER:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).cluster_name.value}}
+      # note you need avid deployed via helm in order to get the helm values
+      HELM_VALUES:
+        sh: helm --kube-context {{.CLUSTER}} get values -n {{.RELEASE}} {{.RELEASE}} -o json --all | jq .
+      SUITES:
+        sh: find . -type f -name '*.test'
+    cmds:
+      - for: { var: SUITES, as: SUITE }
+        cmd: |
+
+          mkdir -p {{.UNITTEST_DIR}}
+
+          {{.SUITE}} \
+            -test.v \
+            2>&1 | go-junit-report -set-exit-code -debug.print-events > {{.UNITTEST_DIR}}/{{.SUITE}}-xunit.xml
+
+        # we want to ignore errors because we want to run all suites, even if there is a test failure
+        ignore_error: true
+      - for: { var: SUITES, as: SUITE }
+        cmd: |
+
+          set -euxo pipefail
+
+          # we have now run all the tests, but we want to fail the task if any of the tests have failed
+          #
+          # the xunit output will always have `failures="x"` on line 2 column 3 if a suite has any test failures
+          FAILURES=$(cat {{.UNITTEST_DIR}}/{{.SUITE}}-xunit.xml | awk 'NR==2 { print $3 }')
+
+          if [[ $FAILURES == *"failures="* ]]; then
+            echo Test Failures Found
+            exit 1
+          fi
+    env:
+      FQDN:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).FQDN.value}}
+      TEST_IDP_KEY:
+        sh: echo {{(fromJson .VALUE_CHAIN_TF).testidp_backend_api_key.value}}
+      MERKLELOG_ACCOUNT_URL:
+        sh: echo {{(fromJson .FORESTRIE_TF).blob_storage_endpoint.value}}
+      MERKLELOG_URL_PREFIX:
+        sh: echo {{(fromJson .FORESTRIE_TF).blob_proxy_path_prefix.value}}
+      PUBLIC_TENANT_ID:
+        sh: echo {{(fromJson .HELM_VALUES).global.terraform.public_tenant_id}}
+      PUBLIC_KEY:
+        sh: echo $"{{(fromJson .FORESTRIE_TF).merkle_log_signer_public_key.value}}"
