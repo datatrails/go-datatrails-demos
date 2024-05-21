@@ -2,15 +2,15 @@
 version: '3'
 
 includes:
-  codeqa:
+  codequality:
     taskfile: ./taskfiles/Taskfile_codequality.yml
     dir: ./taskfiles
 
-  build:
+  gobuild:
     taskfile: ./taskfiles/Taskfile_gobuild.yml
     dir: ./taskfiles
 
-  test:
+  gotest:
     taskfile: ./taskfiles/Taskfile_gotest.yml
     dir: ./taskfiles
 
