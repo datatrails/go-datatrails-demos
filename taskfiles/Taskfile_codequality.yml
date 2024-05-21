@@ -11,7 +11,7 @@ env_build: &env_build
 
   # The GOCACHE in a linux container on Docker for windows MUST be on a linuxy
   # file system
-  GOCACHE: /tmp/jitsuin/forestrie
+  GOCACHE: /tmp/datatrails/merklelog
 
 vars:
 
@@ -27,45 +27,45 @@ tasks:
 
   format:
     desc: "format sources (go fmt)"
-    dir: ../go-forestrie
+    dir: ../
     vars:
       GO_MOD_DIRS:
         sh: find . -type f -name 'go.mod'
     cmds:
-      - for: { var: GO_MOD_DIRS}
+      - for: { var: GO_MOD_DIRS, as: MODULE}
         cmd: |
-          cd $(dirname {{.ITEM}})
+          cd $(dirname {{.MODULE}})
           goimports {{.VERBOSE}} -w .
           gofmt -l -s -w .
 
   lint:
     desc: Quality assurance of **all** code for desktop
-    dir: ../go-forestrie
+    dir: ../
     vars:
       GO_MOD_DIRS:
         sh: find . -type f -name 'go.mod'
       GOLANGCI_LINT_CONFIG: '{{.GOLANGCI_LINT_CONFIG | default ".golangci.yml"}}'
     cmds:
-      - for: { var: GO_MOD_DIRS}
+      - for: { var: GO_MOD_DIRS, as: MODULE}
         cmd: |
           CONFIG=$(realpath {{.GOLANGCI_LINT_CONFIG}})
 
-          NAME=$(basename $(dirname {{.ITEM}}))
+          NAME=$(basename $(dirname {{.MODULE}}))
           echo "Linting: $NAME"
-          cd $(dirname {{.ITEM}})
+          cd $(dirname {{.MODULE}})
           go vet -tags integration,azurite ./...
           golangci-lint --version
           golangci-lint --build-tags integration,azurite -c $CONFIG {{.VERBOSE}} run --timeout 10m ./...
 
   modules:
     desc: Make all go.mod files consistent
-    dir: ../go-forestrie
+    dir: ../
     vars:
       GO_MOD_DIRS:
         sh: find . -type f -name 'go.mod'
     cmds:
-      - for: { var: GO_MOD_DIRS}
+      - for: { var: GO_MOD_DIRS, as: MODULE}
         cmd: |
-          cd $(dirname {{.ITEM}})
+          cd $(dirname {{.MODULE}})
           go mod tidy
           go mod verify
