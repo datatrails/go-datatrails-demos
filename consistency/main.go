@@ -1,0 +1,5 @@
+package consistency
+
+func main() {
+
+}
