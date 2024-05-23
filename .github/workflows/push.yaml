@@ -35,6 +35,10 @@ jobs:
           task format
           task lint
 
+          # If this produces any output, its will error. Formatting and linting changes should have
+          # been committed already.
+          git diff
+
       - name: Unit tests
         run: |
           # Note: it is by design that we don't use the builder

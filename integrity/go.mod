@@ -1,4 +1,4 @@
-module github.com/datatrails/go-datatrails-demos/stub
+module github.com/datatrails/go-datatrails-demos/integrity
 
 go 1.22.2
 
