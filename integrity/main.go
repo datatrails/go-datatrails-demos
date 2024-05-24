@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
-	"github.com/datatrails/go-datatrails-common/logger"
 	"github.com/datatrails/go-datatrails-demos/logverification"
 )
 
@@ -86,12 +85,13 @@ const (
 	url       = "https://app.datatrails.ai/verifiabledata"
 )
 
+// IntegrityDemoDemo of a public datatrails event
 func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 
 	// first create the merklelog reader
 	//
 	// TODO: remove need for accountName, as we just need url and container
-	reader, err := azblob.NewReaderNoAuth("", url, container)
+	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
 	if err != nil {
 		return false, err
 	}
@@ -103,10 +103,6 @@ func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 
 // Demo of the integrity of a public datatrails event
 func main() {
-
-	// TODO: remove logging in azblob package, so we don't need a logger
-	logger.New("NOOP")
-	defer logger.OnExit()
 
 	verified, err := IntegrityDemo([]byte(event))
 	if err != nil {
