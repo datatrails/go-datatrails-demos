@@ -2,7 +2,7 @@
 
 ## How to run a demo
 
-** Please note: all demos within go-datatrails-demos require golang to run **
+**Please note: all demos within go-datatrails-demos require golang to run**
 
 If you do not have golang locally you can run them in a dockerised environment e.g.:
 
