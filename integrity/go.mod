@@ -2,12 +2,9 @@ module github.com/datatrails/go-datatrails-demos/integrity
 
 go 1.22.2
 
-// TODO remove replace when it goes public, and depend on the released version of logverification
-replace github.com/datatrails/go-datatrails-demos/logverification => ../logverification
-
 require (
 	github.com/datatrails/go-datatrails-common v0.15.4-0.20240524103926-4968ec778880
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.0
+	github.com/datatrails/go-datatrails-demos/logverification v0.0.1
 )
 
 require github.com/stretchr/testify v1.9.0
