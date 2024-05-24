@@ -89,8 +89,6 @@ const (
 func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 
 	// first create the merklelog reader
-	//
-	// TODO: remove need for accountName, as we just need url and container
 	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
 	if err != nil {
 		return false, err
