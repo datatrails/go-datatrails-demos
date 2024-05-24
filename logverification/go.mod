@@ -1,4 +1,4 @@
-module github.com/datatrails/forestrie/go-forestrie/demos/logverification
+module github.com/datatrails/go-datatrails-demos/logverification
 
 go 1.22
 
