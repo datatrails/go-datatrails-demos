@@ -49,8 +49,8 @@ github.com/containerd/cgroups/v3 v3.0.3 h1:S5ByHZ/h9PMe5IOQoN7E+nMc2UcLEM/V48DGD
 github.com/containerd/cgroups/v3 v3.0.3/go.mod h1:8HBe7V3aWGLFPd/k03swSIsGjZhHI2WzJmticMgVuz0=
 github.com/coreos/go-systemd/v22 v22.5.0 h1:RrqgGjYQKalulkV8NGVIfkXQf6YYmOyiJKk8iXXhfZs=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
-github.com/datatrails/go-datatrails-common v0.15.4-0.20240524103926-4968ec778880 h1:gEdBcLVxHD/a0SJatDIwgekGig+9kU8J2WuCj6MdBbk=
-github.com/datatrails/go-datatrails-common v0.15.4-0.20240524103926-4968ec778880/go.mod h1:lVLYVw5o+Wj+z8sn8bJBzp9qBCdYQ0DUX91+R5Gn73Q=
+github.com/datatrails/go-datatrails-common v0.16.0 h1:q8E7z9+Vvq0hhCkzwt2sDcoK1QqbOsbhQtUyWMqi9nc=
+github.com/datatrails/go-datatrails-common v0.16.0/go.mod h1:lVLYVw5o+Wj+z8sn8bJBzp9qBCdYQ0DUX91+R5Gn73Q=
 github.com/datatrails/go-datatrails-common-api-gen v0.4.5 h1:QtxIFSdOEf6bhHZd7g/MfWdCWfPEtwTQNDz3K9u33+c=
 github.com/datatrails/go-datatrails-common-api-gen v0.4.5/go.mod h1:OQN91xvlW6xcWTFvwsM2Nn4PZwFAIOE52FG7yRl4QPQ=
 github.com/datatrails/go-datatrails-demos/logverification v0.0.2 h1:pn5p2j79gc2AO78B0dLtm8XbdZnRGmBGmzBJXjJMtM0=
