@@ -2,6 +2,18 @@
 
 ## How to run a demo
 
+** Please note: all demos within go-datatrails-demos require golang to run **
+
+If you do not have golang locally you can run them in a dockerised environment e.g.:
+
+```
+docker run -v ./integrity:/usr/src/myapp -w /usr/src/myapp  golang:1.22-alpine go run .
+```
+
+Where `integrity` is the demo to be run and it is run from the root of the repo.
+
+### With Task
+
 Prerequisite: 
 1. install task: https://taskfile.dev/installation/
 
@@ -12,7 +24,7 @@ Steps:
 task demos:integrity
 ```
 
-## How to run a demo WITHOUT TASK
+### Without Task
 
 If you do not have task installed, you can run the demo the following way:
 
