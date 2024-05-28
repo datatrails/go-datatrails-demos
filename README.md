@@ -10,8 +10,8 @@ then verifying the inclusion proof against the merkle log.
 If the inclusion proof is verified successfully, we can say that the
 datatrails event is included on the merkle log.
 
-### Dockerised Demo
-To run the integrity demo without local golang install:
+### Docker Demo
+To run the integrity demo with docker:
 
 ```
 docker run -v ./integrity:/usr/src/myapp -w /usr/src/myapp  golang:1.22-alpine go run .

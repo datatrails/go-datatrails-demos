@@ -13,7 +13,7 @@ import (
  * This is achieved by creating an inclusion proof of the event,
  *  then verifying the inclusion proof.
  *
- * This proves that the datatrails event is included in the merklelog
+ * This proves that the datatrails event is included in the merklelog.
  */
 
 const (
@@ -23,7 +23,7 @@ const (
 	// the event used in this demo is from a breast cancer diagnosing AI model sample
 	//  found here: https://app.datatrails.ai/archivist/publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/71d7ab65-359b-40d9-9bbd-102ec2092601
 	//
-	// NOTE: we have stripped the public prefix from the 'identity' and 'asset_identity' fields
+	// NOTE: we have stripped the public prefix from the 'identity' and 'asset_identity' fields.
 	event = `
 	{
 		"identity": "assets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/71d7ab65-359b-40d9-9bbd-102ec2092601",
@@ -85,7 +85,7 @@ const (
 	url       = "https://app.datatrails.ai/verifiabledata"
 )
 
-// IntegrityDemoDemo of a public datatrails event
+// IntegrityDemo of a public datatrails event
 func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 
 	// first create the merklelog reader
