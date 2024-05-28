@@ -14,7 +14,19 @@ includes:
     taskfile: ./taskfiles/Taskfile_gotest.yml
     dir: ./taskfiles
 
+  demos:
+    taskfile: ./taskfiles/Taskfile_demos.yml
+    dir: ./taskfiles
+
 tasks:
+
+  default:
+    desc: defaults to listing the available task runes
+    cmds:
+      - cmd: |
+
+          task --list
+
   build:fast:
     desc: ensure go build works for all modules
     cmds:
@@ -44,9 +56,3 @@ tasks:
     desc: run the unit tests
     cmds:
       - task: gotest:go:unit
-
-  # test:integration:
-  #   desc: run the azurite integration tests
-  #   cmds:
-  #    - task: azurite:preflight
-  #    - task: gotest:go:azurite

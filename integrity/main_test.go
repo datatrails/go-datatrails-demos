@@ -1,11 +1,19 @@
-package integrity
+package main
 
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(t *testing.T) {
-	require.True(t, true)
+// TestIntegrityDemo tests the sample public event
+//
+//	is included on the merklelog.
+func TestIntegrityDemo(t *testing.T) {
+
+	verified, err := IntegrityDemo([]byte(event))
+
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, verified)
+
 }
