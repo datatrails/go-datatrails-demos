@@ -7,6 +7,7 @@ import (
 	"hash"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
+	"github.com/datatrails/go-datatrails-common/logger"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 	"github.com/datatrails/go-datatrails-merklelog/mmr"
 )
@@ -177,6 +178,8 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 
 	lowestLeafIndex, highestLeafIndex := LeafRange(events)
 
+	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+
 	eventIndex := 0
 
 	for leafIndex := lowestLeafIndex; leafIndex <= highestLeafIndex; leafIndex += 1 {
@@ -192,7 +195,7 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 			tenantId = event.tenantID
 		}
 
-		eventType, err := VerifyEventInList(hasher, leafIndex, event, reader, &massifContext, tenantId)
+		eventType, err := VerifyEventInList(hasher, leafIndex, event, massifReader, &massifContext, tenantId)
 		if err != nil {
 
 			// NOTE: for now fail at the first sign of an EXCLUDED event.
@@ -220,7 +223,7 @@ func VerifyEventInList(
 	hasher hash.Hash,
 	leafIndex uint64,
 	event EventDetails,
-	reader azblob.Reader,
+	reader massifs.MassifReader,
 	massifContext *massifs.MassifContext,
 	tenantID string,
 ) (EventType, error) {

@@ -23,7 +23,7 @@ require (
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/datatrails/go-datatrails-common v0.16.1 // indirect
 	github.com/datatrails/go-datatrails-common-api-gen v0.4.8 // indirect
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530101426-02d513d733b8 // indirect
+	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530102114-fdd104e1ed8f // indirect
 	github.com/datatrails/go-datatrails-merklelog/massifs v0.0.5 // indirect
 	github.com/datatrails/go-datatrails-merklelog/mmr v0.0.1 // indirect
 	github.com/datatrails/go-datatrails-merklelog/mmrtesting v0.0.1 // indirect

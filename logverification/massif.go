@@ -21,18 +21,16 @@ var (
 // Massif gets the massif (blob) that contains the given mmrIndex, from azure blob storage
 //
 //	defined by the azblob configuration.
-func Massif(mmrIndex uint64, reader azblob.Reader, tenantId string, massifHeight uint8) (*massifs.MassifContext, error) {
+func Massif(mmrIndex uint64, massifReader massifs.MassifReader, tenantId string, massifHeight uint8) (*massifs.MassifContext, error) {
 
 	massifIndex, err := massifs.MassifIndexFromMMRIndex(massifHeight, mmrIndex)
 	if err != nil {
 		return nil, err
 	}
 
-	// 3. read the massif (blob) using the azblob read client and the massif index
-	//     and the tenant identity from the event.
-	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
+	defer cancel()
 
-	ctx := context.Background()
 	massif, err := massifReader.GetMassif(ctx, tenantId, massifIndex)
 	if err != nil {
 		return nil, err
@@ -66,7 +64,9 @@ func MassifFromEvent(eventJson []byte, reader azblob.Reader, options ...VerifyOp
 		}
 	}
 
-	return Massif(merkleLogEntry.Commit.Index, reader, tenantId, massifHeight)
+	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+
+	return Massif(merkleLogEntry.Commit.Index, massifReader, tenantId, massifHeight)
 }
 
 // ChooseHashingSchema chooses the hashing schema based on the log version in the massif blob start record.
@@ -87,7 +87,7 @@ func ChooseHashingSchema(massifStart massifs.MassifStart) (EventHasher, error) {
 //
 // A Massif is a blob that contains a portion of the merkle log.
 // A MassifContext is the context used to get specific massifs.
-func UpdateMassifContext(reader azblob.Reader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
+func UpdateMassifContext(massifReader massifs.MassifReader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
 
 	// there is a chance here that massifContext is nil, in this case we can't do anything
 	//  as we set the massifContext as a side effect, and there is no pointer value.
@@ -102,21 +102,11 @@ func UpdateMassifContext(reader azblob.Reader, massifContext *massifs.MassifCont
 
 	// if we get here, we know that we need a different massifContext to the given massifContext
 
-	massifIndex, err := massifs.MassifIndexFromMMRIndex(massifHeight, mmrIndex)
+	nextContext, err := Massif(mmrIndex, massifReader, tenantID, massifHeight)
 	if err != nil {
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
-	defer cancel()
-
-	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
-
-	nextContext, err := massifReader.GetMassif(ctx, tenantID, massifIndex)
-	if err != nil {
-		return err
-	}
-
-	*massifContext = nextContext
+	*massifContext = *nextContext
 	return nil
 }
