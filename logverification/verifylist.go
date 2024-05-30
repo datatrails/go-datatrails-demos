@@ -186,7 +186,7 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 	for leafIndex := lowestLeafIndex; leafIndex <= highestLeafIndex; leafIndex += 1 {
 
 		// check we have enough events
-		if len(events) >= eventIndex {
+		if eventIndex >= len(events) {
 			return nil, ErrNotEnoughEventsInList
 		}
 
