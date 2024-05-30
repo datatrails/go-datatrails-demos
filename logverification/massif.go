@@ -87,7 +87,7 @@ func ChooseHashingSchema(massifStart massifs.MassifStart) (EventHasher, error) {
 //
 // A Massif is a blob that contains a portion of the merkle log.
 // A MassifContext is the context used to get specific massifs.
-func UpdateMassifContext(reader massifs.MassifReader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
+func UpdateMassifContext(reader azblob.Reader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
 
 	// there is a chance here that massifContext is nil, in this case we can't do anything
 	//  as we set the massifContext as a side effect, and there is no pointer value.
@@ -110,7 +110,9 @@ func UpdateMassifContext(reader massifs.MassifReader, massifContext *massifs.Mas
 	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
 	defer cancel()
 
-	nextContext, err := reader.GetMassif(ctx, tenantID, massifIndex)
+	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+
+	nextContext, err := massifReader.GetMassif(ctx, tenantID, massifIndex)
 	if err != nil {
 		return err
 	}

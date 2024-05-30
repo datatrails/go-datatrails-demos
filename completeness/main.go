@@ -90,12 +90,12 @@ const (
 )
 
 // CompletenessDemo of a list of public datatrails events
-func CompletenessDemo(eventJson []byte) (verified bool, err error) {
+func CompletenessDemo(eventJson []byte) (omittedEvents []uint64, err error) {
 
 	// first create the merklelog reader
 	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	// now verify the public event is in the merklelog
@@ -106,7 +106,7 @@ func CompletenessDemo(eventJson []byte) (verified bool, err error) {
 // Demo of the integrity of a public datatrails event
 func main() {
 
-	verified, err := CompletenessDemo([]byte(event))
+	verified, err := CompletenessDemo([]byte(eventList))
 	if err != nil {
 		fmt.Printf("\nerror: %v\n", err)
 	}

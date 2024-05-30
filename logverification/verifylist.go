@@ -6,6 +6,7 @@ import (
 	"errors"
 	"hash"
 
+	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 	"github.com/datatrails/go-datatrails-merklelog/mmr"
 )
@@ -160,7 +161,7 @@ var (
  *
  * Returns the omitted event mmrIndexes.
  */
-func VerifyList(reader massifs.MassifReader, eventListJson []byte, options ...VerifyOption) ([]uint64, error) {
+func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOption) ([]uint64, error) {
 
 	verifyOptions := ParseOptions(options...)
 
@@ -219,7 +220,7 @@ func VerifyEventInList(
 	hasher hash.Hash,
 	leafIndex uint64,
 	event EventDetails,
-	massifReader massifs.MassifReader,
+	reader azblob.Reader,
 	massifContext *massifs.MassifContext,
 	tenantID string,
 ) (EventType, error) {
@@ -313,7 +314,7 @@ func VerifyEventInList(
 	// We now do an inclusion proof on the event, to prove that the event is included at the leaf node.
 
 	// Ensure we're using the correct massif for the current leaf
-	err := UpdateMassifContext(massifReader, massifContext, leafMMRIndex, tenantID, defaultMassifHeight)
+	err := UpdateMassifContext(reader, massifContext, leafMMRIndex, tenantID, defaultMassifHeight)
 	if err != nil {
 		return Unknown, err
 	}
