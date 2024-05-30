@@ -104,6 +104,7 @@ var (
 	ErrDuplicateEventMMRIndex = errors.New("event mmrIndex is the same as the previous event")
 	ErrEventNotOnLeaf         = errors.New("event does not correspond to the event found on the leaf node")
 	ErrInclusionProofVerify   = errors.New("event failed to verify the inclusion proof on the merkle log")
+	ErrNotEnoughEventsInList  = errors.New("the number of events in the list is less than the number of leafs on the log")
 )
 
 /** VerifyList verifies a given list of events against a range of leaves in the immutable merkle log.
@@ -183,6 +184,11 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 	eventIndex := 0
 
 	for leafIndex := lowestLeafIndex; leafIndex <= highestLeafIndex; leafIndex += 1 {
+
+		// check we have enough events
+		if len(events) >= eventIndex {
+			return nil, ErrNotEnoughEventsInList
+		}
 
 		event := events[eventIndex]
 
