@@ -185,14 +185,8 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 
 	for leafIndex := lowestLeafIndex; leafIndex <= highestLeafIndex; leafIndex += 1 {
 
-		// There is a chance if there are omitted events
-		//  that the eventList is too small for the number
-		//   of leaves.
-		//
-		// If we get to that point we want to break and return
-		//  the omitted events.
 		if eventIndex >= len(events) {
-			break
+			return nil, ErrNotEnoughEventsInList
 		}
 
 		event := events[eventIndex]
@@ -218,6 +212,10 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 		// if the event is OMITTED add the leaf to the omitted list
 		if eventType == Omitted {
 			omittedMMRIndices = append(omittedMMRIndices, mmr.TreeIndex(leafIndex))
+
+			// as the event is still the lowest mmrIndex we check this event
+			//  against the next leaf
+			continue
 		}
 
 		eventIndex += 1
