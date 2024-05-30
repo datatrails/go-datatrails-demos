@@ -40,8 +40,8 @@ go run .
 
 The completenesss demo will verify the integrity of a list of datatrails events.
 
-This is achieved by checking that ONLY the events in the list exist on the log within a range
-starting from the first event ending at the last event in the list.
+This is achieved by checking that **ONLY** the events in the list exist on the log within a range
+starting from the first event, ending at the last event in the list.
 
 Every event in the list then has an inclusion proof generated.
 
