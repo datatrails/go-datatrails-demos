@@ -137,7 +137,7 @@ var (
  *
  * If an event within the list of events is not present on the immutable merklelog
  *	 at the expected leaf index it is in tandem with, we call that an EXCLUDED event.
- *	 In the below example, event2 is an EXCLUDED event.
+ *	 In the below example, event2 is an EXCLUDED event. (Note: proof of exclusion using the trie index is not shown in this demo)
  *
  * |-----------------------------|
  * | event1 event2 event3 event4 | event list (lowest mmrIndex to highest)
