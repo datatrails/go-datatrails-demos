@@ -133,7 +133,7 @@ func ParseEventList(eventsJson []byte) ([]EventDetails, error) {
 		events = append(events, eventDetails)
 	}
 
-	// Sorting the events by MMR index implies that they're sorted in log append order.
+	// Sorting the events by MMR index guarantees that they're sorted in log append order.
 	sort.Slice(events, func(i, j int) bool {
 		return events[i].merkleLog.Commit.Index < events[j].merkleLog.Commit.Index
 	})
