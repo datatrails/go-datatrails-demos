@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/datatrails/go-datatrails-common v0.16.1
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530102756-109763df17b4
+	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530114926-8e28942cc526
 	github.com/stretchr/testify v1.9.0
 )
 
