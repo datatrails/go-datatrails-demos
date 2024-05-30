@@ -160,7 +160,9 @@ var (
  *
  * Returns the omitted event mmrIndexes.
  */
-func VerifyList(reader massifs.MassifReader, eventListJson []byte) ([]uint64, error) {
+func VerifyList(reader massifs.MassifReader, eventListJson []byte, options ...VerifyOption) ([]uint64, error) {
+
+	verifyOptions := ParseOptions(options...)
 
 	hasher := sha256.New()
 
@@ -180,7 +182,16 @@ func VerifyList(reader massifs.MassifReader, eventListJson []byte) ([]uint64, er
 
 		event := events[eventIndex]
 
-		eventType, err := VerifyEventInList(hasher, leafIndex, event, reader, &massifContext, event.tenantID)
+		// ensure we set the tenantId if
+		//  if it passed in as an optional argument
+		tenantId := verifyOptions.tenantId
+		if tenantId == "" {
+
+			// otherwise set it to the event tenantID
+			tenantId = event.tenantID
+		}
+
+		eventType, err := VerifyEventInList(hasher, leafIndex, event, reader, &massifContext, tenantId)
 		if err != nil {
 
 			// NOTE: for now fail at the first sign of an EXCLUDED event.
