@@ -3,7 +3,7 @@ module github.com/datatrails/go-datatrails-demos/integrity
 go 1.22.2
 
 require (
-	github.com/datatrails/go-datatrails-common v0.16.0
+	github.com/datatrails/go-datatrails-common v0.16.1
 	github.com/datatrails/go-datatrails-demos/logverification v0.0.2
 )
 
@@ -26,7 +26,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
-	github.com/KimMachineGun/automemlimit v0.6.0 // indirect
+	github.com/KimMachineGun/automemlimit v0.6.1 // indirect
 	github.com/cilium/ebpf v0.15.0 // indirect
 	github.com/containerd/cgroups/v3 v3.0.3 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect

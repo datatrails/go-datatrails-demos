@@ -1,11 +1,10 @@
 package logverification
 
+/**
+ * Defines constants only used in testing.
+ */
+
 const (
-	defaultMassifHeight = 14
-
-	// LeafTypePlain is the domain separator for events
-	LeafTypePlain = uint8(0)
-
 	testEventJson = `
 	{
 		"identity": "assets/9ccdc19b-44a1-434c-afab-14f8eac3405c/events/82c9f5c2-fe77-4885-86aa-417f654d3b2f",

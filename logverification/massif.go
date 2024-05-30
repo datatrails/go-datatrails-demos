@@ -3,10 +3,19 @@ package logverification
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-common/logger"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
+)
+
+const (
+	contextTimeout = 30 * time.Second
+)
+
+var (
+	ErrNilMassifContext = errors.New("nil massif context")
 )
 
 // Massif gets the massif (blob) that contains the given mmrIndex, from azure blob storage
@@ -70,4 +79,42 @@ func ChooseHashingSchema(massifStart massifs.MassifStart) (EventHasher, error) {
 	default:
 		return nil, errors.New("no hashing scheme for log version")
 	}
+}
+
+// UpdateMassifContext, updates the given massifContext to the massif that stores
+//
+//	the given mmrIndex for the given tenant.
+//
+// A Massif is a blob that contains a portion of the merkle log.
+// A MassifContext is the context used to get specific massifs.
+func UpdateMassifContext(reader massifs.MassifReader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
+
+	// there is a chance here that massifContext is nil, in this case we can't do anything
+	//  as we set the massifContext as a side effect, and there is no pointer value.
+	if massifContext == nil {
+		return ErrNilMassifContext
+	}
+
+	// check if the current massifContext contains the given mmrIndex
+	if mmrIndex >= massifContext.Start.FirstIndex && mmrIndex < massifContext.LastLeafMMRIndex() {
+		return nil
+	}
+
+	// if we get here, we know that we need a different massifContext to the given massifContext
+
+	massifIndex, err := massifs.MassifIndexFromMMRIndex(massifHeight, mmrIndex)
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
+	defer cancel()
+
+	nextContext, err := reader.GetMassif(ctx, tenantID, massifIndex)
+	if err != nil {
+		return err
+	}
+
+	*massifContext = nextContext
+	return nil
 }

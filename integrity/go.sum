@@ -43,6 +43,7 @@ github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2 h1:XHOnouVk1mx
 github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2/go.mod h1:wP83P5OoQ5p6ip3ScPr0BAq0BvuPAvacpEuSzyouqAI=
 github.com/KimMachineGun/automemlimit v0.6.0 h1:p/BXkH+K40Hax+PuWWPQ478hPjsp9h1CPDhLlA3Z37E=
 github.com/KimMachineGun/automemlimit v0.6.0/go.mod h1:T7xYht7B8r6AG/AqFcUdc7fzd2bIdBKmepfP2S1svPY=
+github.com/KimMachineGun/automemlimit v0.6.1/go.mod h1:T7xYht7B8r6AG/AqFcUdc7fzd2bIdBKmepfP2S1svPY=
 github.com/cilium/ebpf v0.15.0 h1:7NxJhNiBT3NG8pZJ3c+yfrVdHY8ScgKD27sScgjLMMk=
 github.com/cilium/ebpf v0.15.0/go.mod h1:DHp1WyrLeiBh19Cf/tfiSMhqheEiK8fXFZ4No0P1Hso=
 github.com/containerd/cgroups/v3 v3.0.3 h1:S5ByHZ/h9PMe5IOQoN7E+nMc2UcLEM/V48DGDJ9kip0=
@@ -51,6 +52,8 @@ github.com/coreos/go-systemd/v22 v22.5.0 h1:RrqgGjYQKalulkV8NGVIfkXQf6YYmOyiJKk8
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/datatrails/go-datatrails-common v0.16.0 h1:q8E7z9+Vvq0hhCkzwt2sDcoK1QqbOsbhQtUyWMqi9nc=
 github.com/datatrails/go-datatrails-common v0.16.0/go.mod h1:lVLYVw5o+Wj+z8sn8bJBzp9qBCdYQ0DUX91+R5Gn73Q=
+github.com/datatrails/go-datatrails-common v0.16.1 h1:kaNOwyu8EmBbIR44daWDiUZxBtersV4s/s73CUEvHyU=
+github.com/datatrails/go-datatrails-common v0.16.1/go.mod h1:IEcuwUaFl+bI1tt30r+Ov2+nvpcAZH/kXmAPGFjkwT4=
 github.com/datatrails/go-datatrails-common-api-gen v0.4.5 h1:QtxIFSdOEf6bhHZd7g/MfWdCWfPEtwTQNDz3K9u33+c=
 github.com/datatrails/go-datatrails-common-api-gen v0.4.5/go.mod h1:OQN91xvlW6xcWTFvwsM2Nn4PZwFAIOE52FG7yRl4QPQ=
 github.com/datatrails/go-datatrails-demos/logverification v0.0.2 h1:pn5p2j79gc2AO78B0dLtm8XbdZnRGmBGmzBJXjJMtM0=
