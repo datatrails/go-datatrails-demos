@@ -15,10 +15,10 @@ import "github.com/datatrails/go-datatrails-merklelog/mmr"
 func LeafRange(sortedEvents []EventDetails) (uint64, uint64) {
 
 	lowerBoundMMRIndex := sortedEvents[0].merkleLog.Commit.Index
-	lowerBoundLeafIndex := mmr.LeafCount(lowerBoundMMRIndex) // Note: LeafCount takes an mmrIndex here not a size
+	lowerBoundLeafIndex := mmr.LeafCount(lowerBoundMMRIndex+1) - 1 // Note: LeafCount takes an mmrIndex here not a size
 
 	upperBoundMMRIndex := sortedEvents[len(sortedEvents)-1].merkleLog.Commit.Index
-	upperBoundLeafIndex := mmr.LeafCount(upperBoundMMRIndex) // Note: LeafCount takes an mmrIndex here not a size
+	upperBoundLeafIndex := mmr.LeafCount(upperBoundMMRIndex+1) - 1 // Note: LeafCount takes an mmrIndex here not a size
 
 	return lowerBoundLeafIndex, upperBoundLeafIndex
 
