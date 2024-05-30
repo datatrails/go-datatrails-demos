@@ -6,14 +6,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestIntegrityDemo tests the sample public event
-//
-//	is included on the merklelog.
-func TestIntegrityDemo(t *testing.T) {
+/** TestCompletenessDemo tests the sample public events
+ *   are included on the merklelog.
+ *	 Also checks that the list is complete, i.e.
+ *	 there are no events missing from the list, or have been added to the list
+ *	 that are not on the merklelog.
+ */
+func TestCompletenessDemo(t *testing.T) {
 
-	verified, err := CompletenessDemo([]byte(event))
+	omittedEvents, err := CompletenessDemo([]byte(eventList))
 
 	assert.Equal(t, nil, err)
-	assert.Equal(t, true, verified)
+	assert.Equal(t, 0, len(omittedEvents))
 
 }

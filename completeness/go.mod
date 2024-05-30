@@ -2,14 +2,18 @@ module github.com/datatrails/go-datatrails-demos/completeness
 
 go 1.22.2
 
-require github.com/stretchr/testify v1.9.0
+require (
+	github.com/datatrails/go-datatrails-common v0.16.1
+	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530102756-109763df17b4
+	github.com/stretchr/testify v1.9.0
+)
 
 require (
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.11.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.8.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/messaging/azservicebus v1.7.1 // indirect
-	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.3.2 // indirect
+	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v0.4.1 // indirect
 	github.com/Azure/go-amqp v1.0.5 // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
 	github.com/Azure/go-autorest/autorest v0.11.29 // indirect
@@ -21,9 +25,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
-	github.com/datatrails/go-datatrails-common v0.16.1 // indirect
 	github.com/datatrails/go-datatrails-common-api-gen v0.4.8 // indirect
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.3-0.20240530102114-fdd104e1ed8f // indirect
 	github.com/datatrails/go-datatrails-merklelog/massifs v0.0.5 // indirect
 	github.com/datatrails/go-datatrails-merklelog/mmr v0.0.1 // indirect
 	github.com/datatrails/go-datatrails-merklelog/mmrtesting v0.0.1 // indirect

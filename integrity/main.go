@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-demos/logverification"
@@ -22,12 +23,10 @@ const (
 	//
 	// the event used in this demo is from a breast cancer diagnosing AI model sample
 	//  found here: https://app.datatrails.ai/archivist/publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/71d7ab65-359b-40d9-9bbd-102ec2092601
-	//
-	// NOTE: we have stripped the public prefix from the 'identity' and 'asset_identity' fields.
 	event = `
 	{
-		"identity": "assets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/71d7ab65-359b-40d9-9bbd-102ec2092601",
-		"asset_identity": "assets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6",
+		"identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/71d7ab65-359b-40d9-9bbd-102ec2092601",
+		"asset_identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6",
 		"event_attributes": {
 			"arc_description": "Approving Model",
 			"arc_display_type": "Model Approval",
@@ -88,14 +87,18 @@ const (
 // IntegrityDemo of a public datatrails event
 func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 
-	// first create the merklelog reader
+	// first we need to strip the 'public' prefix from all identity and assetIdentity fields
+	//  as the hashing schema does not support public prefixing
+	eventNoPublicPrefix := strings.ReplaceAll(event, "publicassets/", "assets/")
+
+	// then create the merklelog reader
 	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
 	if err != nil {
 		return false, err
 	}
 
 	// now verify the public event is in the merklelog
-	return logverification.VerifyEvent(reader, []byte(event), logverification.WithTenantId(publicTenantID))
+	return logverification.VerifyEvent(reader, []byte(eventNoPublicPrefix), logverification.WithTenantId(publicTenantID))
 
 }
 
