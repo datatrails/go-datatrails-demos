@@ -1,6 +1,6 @@
 module github.com/datatrails/go-datatrails-demos/completeness
 
-go 1.22.2
+go 1.22
 
 require (
 	github.com/datatrails/go-datatrails-common v0.16.1
