@@ -552,6 +552,57 @@ const (
 				}
 			},
 			{
+				"identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/8fe3af12-4052-45e8-bb8c-7eba4cd04ead",
+				"asset_identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6",
+				"event_attributes": {
+					"arc_display_type": "Data Card Approval",
+					"approvers": "Product Team",
+					"arc_description": "Approving Data Card"
+				},
+				"asset_attributes": {
+					"model_version": "0.0.0",
+					"modelcard_version": "0.0.0",
+					"datacard_version": "2.0.0"
+				},
+				"operation": "Record",
+				"behaviour": "RecordEvidence",
+				"timestamp_declared": "2024-05-07T20:30:08Z",
+				"timestamp_accepted": "2024-05-07T20:30:08Z",
+				"timestamp_committed": "2024-05-07T20:30:38.104Z",
+				"principal_declared": {
+					"issuer": "",
+					"subject": "",
+					"display_name": "",
+					"email": ""
+				},
+				"principal_accepted": {
+					"issuer": "",
+					"subject": "",
+					"display_name": "",
+					"email": ""
+				},
+				"confirmation_status": "CONFIRMED",
+				"transaction_id": "0x224d41c6d984cb67e52274d62a48cd31fce39b6731f25f827d4c59a9cfdff427",
+				"block_number": 7030,
+				"transaction_index": 0,
+				"from": "0x344b47d0FC35a551bd8a7Db4999226C04E764db3",
+				"tenant_identity": "tenant/f023005c-000f-4a57-b2fe-eef425f243ad",
+				"merklelog_entry": {
+					"commit": {
+						"index": "486",
+						"idtimestamp": "018f54c046190ce300"
+					},
+					"confirm": {
+						"mmr_size": "487",
+						"root": "BuArZXNf+rAAqr1FBrF9GyCJrRfVerW6JisdAAOdbe0=",
+						"timestamp": "1715113838217",
+						"idtimestamp": "",
+						"signed_tree_head": ""
+					},
+					"unequivocal": null
+				}
+			},
+			{
 				"identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/3b60a93e-65a7-4d12-96ea-70ef8d85b24f",
 				"asset_identity": "publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6",
 				"event_attributes": {
@@ -712,7 +763,6 @@ const (
 		"next_page_token": ""
 	}
 	`
-
 	publicTenantID = "tenant/6ea5cd00-c711-3649-6914-7b125928bbb4"
 
 	// merklelog reader configuration
