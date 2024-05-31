@@ -58,7 +58,7 @@ func main() {
 	//       list of events, where unrelated events are purposefully omitted.
 	//
 	if len(omittedEvents) > 0 {
-		fmt.Printf("\nFailed Complete List verification, omitted events mmrIndexs: %v", omittedEvents)
+		fmt.Printf("\nFailed Complete List verification, omitted events mmrIndexs: %v\n", omittedEvents)
 		os.Exit(1)
 	}
 
