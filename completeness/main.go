@@ -36,7 +36,7 @@ func CompletenessDemo(eventJson []byte) (omittedEvents []uint64, err error) {
 
 }
 
-// Demo of the integrity of a public datatrails event
+// Demo of the completeness of a public datatrails event
 func main() {
 
 	omittedEvents, err := CompletenessDemo([]byte(eventList))
