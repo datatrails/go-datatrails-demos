@@ -162,6 +162,12 @@ var (
  * |-----------------------------|
  *
  * Returns the omitted event mmrIndexes.
+ *
+ * The options argument can be the following:
+ *
+ *   WithTenantId - the tenantId of the merklelog, the event is expected
+ *                  to be included on. E.g. the public tenant
+ *                  for public events.
  */
 func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOption) ([]uint64, error) {
 
