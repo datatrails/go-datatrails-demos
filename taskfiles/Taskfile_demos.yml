@@ -18,3 +18,11 @@ tasks:
       - cmd: |
           
           go run .
+
+  completeness:
+    desc: "run the completeness demo"
+    dir: ../completeness
+    cmds:
+      - cmd: |
+          
+          go run .

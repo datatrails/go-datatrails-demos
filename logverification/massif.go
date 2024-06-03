@@ -3,27 +3,34 @@ package logverification
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-common/logger"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 )
 
+const (
+	contextTimeout = 30 * time.Second
+)
+
+var (
+	ErrNilMassifContext = errors.New("nil massif context")
+)
+
 // Massif gets the massif (blob) that contains the given mmrIndex, from azure blob storage
 //
 //	defined by the azblob configuration.
-func Massif(mmrIndex uint64, reader azblob.Reader, tenantId string, massifHeight uint8) (*massifs.MassifContext, error) {
+func Massif(mmrIndex uint64, massifReader massifs.MassifReader, tenantId string, massifHeight uint8) (*massifs.MassifContext, error) {
 
 	massifIndex, err := massifs.MassifIndexFromMMRIndex(massifHeight, mmrIndex)
 	if err != nil {
 		return nil, err
 	}
 
-	// 3. read the massif (blob) using the azblob read client and the massif index
-	//     and the tenant identity from the event.
-	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+	ctx, cancel := context.WithTimeout(context.Background(), contextTimeout)
+	defer cancel()
 
-	ctx := context.Background()
 	massif, err := massifReader.GetMassif(ctx, tenantId, massifIndex)
 	if err != nil {
 		return nil, err
@@ -57,7 +64,9 @@ func MassifFromEvent(eventJson []byte, reader azblob.Reader, options ...VerifyOp
 		}
 	}
 
-	return Massif(merkleLogEntry.Commit.Index, reader, tenantId, massifHeight)
+	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
+
+	return Massif(merkleLogEntry.Commit.Index, massifReader, tenantId, massifHeight)
 }
 
 // ChooseHashingSchema chooses the hashing schema based on the log version in the massif blob start record.
@@ -70,4 +79,34 @@ func ChooseHashingSchema(massifStart massifs.MassifStart) (EventHasher, error) {
 	default:
 		return nil, errors.New("no hashing scheme for log version")
 	}
+}
+
+// UpdateMassifContext, updates the given massifContext to the massif that stores
+//
+//	the given mmrIndex for the given tenant.
+//
+// A Massif is a blob that contains a portion of the merkle log.
+// A MassifContext is the context used to get specific massifs.
+func UpdateMassifContext(massifReader massifs.MassifReader, massifContext *massifs.MassifContext, mmrIndex uint64, tenantID string, massifHeight uint8) error {
+
+	// there is a chance here that massifContext is nil, in this case we can't do anything
+	//  as we set the massifContext as a side effect, and there is no pointer value.
+	if massifContext == nil {
+		return ErrNilMassifContext
+	}
+
+	// check if the current massifContext contains the given mmrIndex
+	if mmrIndex >= massifContext.Start.FirstIndex && mmrIndex < massifContext.LastLeafMMRIndex() {
+		return nil
+	}
+
+	// if we get here, we know that we need a different massifContext to the given massifContext
+
+	nextContext, err := Massif(mmrIndex, massifReader, tenantID, massifHeight)
+	if err != nil {
+		return err
+	}
+
+	*massifContext = *nextContext
+	return nil
 }
