@@ -10,10 +10,10 @@ import (
 
 // EventDetails contains key information for verifying inclusion of merkle log events
 type EventDetails struct {
-	eventID   string
-	tenantID  string
-	eventHash []byte
-	merkleLog *assets.MerkleLogEntry
+	EventID   string
+	TenantID  string
+	EventHash []byte
+	MerkleLog *assets.MerkleLogEntry
 }
 
 // ParseEventList takes a json list of events returned by the datatrails events API
@@ -64,17 +64,17 @@ func ParseEventList(eventsJson []byte) ([]EventDetails, error) {
 		}
 
 		eventDetails := EventDetails{
-			eventID:   entry.Identity,
-			tenantID:  entry.TenantIdentity,
-			eventHash: eventHash,
-			merkleLog: merkleLog,
+			EventID:   entry.Identity,
+			TenantID:  entry.TenantIdentity,
+			EventHash: eventHash,
+			MerkleLog: merkleLog,
 		}
 		events = append(events, eventDetails)
 	}
 
 	// Sorting the events by MMR index guarantees that they're sorted in log append order.
 	sort.Slice(events, func(i, j int) bool {
-		return events[i].merkleLog.Commit.Index < events[j].merkleLog.Commit.Index
+		return events[i].MerkleLog.Commit.Index < events[j].MerkleLog.Commit.Index
 	})
 
 	return events, nil

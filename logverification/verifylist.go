@@ -203,7 +203,7 @@ func VerifyList(reader azblob.Reader, eventListJson []byte, options ...VerifyOpt
 		if tenantId == "" {
 
 			// otherwise set it to the event tenantID
-			tenantId = event.tenantID
+			tenantId = event.TenantID
 		}
 
 		eventType, err := VerifyEventInList(hasher, leafIndex, event, massifReader, &massifContext, tenantId)
@@ -246,7 +246,7 @@ func VerifyEventInList(
 	hasher.Reset()
 
 	leafMMRIndex := mmr.TreeIndex(leafIndex)
-	eventMMRIndex := event.merkleLog.Commit.Index
+	eventMMRIndex := event.MerkleLog.Commit.Index
 
 	// First we check if the event mmrIndex corresponds to a leaf node.
 	//
@@ -332,7 +332,7 @@ func VerifyEventInList(
 	// We now do an inclusion proof on the event, to prove that the event is included at the leaf node.
 
 	// Ensure we're using the correct massif for the current leaf
-	err := UpdateMassifContext(reader, massifContext, leafMMRIndex, tenantID, defaultMassifHeight)
+	err := UpdateMassifContext(reader, massifContext, leafMMRIndex, tenantID, DefaultMassifHeight)
 	if err != nil {
 		return Unknown, err
 	}
@@ -346,7 +346,7 @@ func VerifyEventInList(
 	// Check that the leaf node mmrEntry is the same as the event hash
 	//
 	// If its not, we know that the given event is not the same as the event on the leaf node.
-	if !bytes.Equal(leafMMREntry, event.eventHash) {
+	if !bytes.Equal(leafMMREntry, event.EventHash) {
 		return Excluded, ErrEventNotOnLeaf
 	}
 
@@ -363,7 +363,7 @@ func VerifyEventInList(
 		return Unknown, err
 	}
 
-	verified := mmr.VerifyInclusion(mmrSize, hasher, event.eventHash, leafMMRIndex, inclusionProof, root)
+	verified := mmr.VerifyInclusion(mmrSize, hasher, event.EventHash, leafMMRIndex, inclusionProof, root)
 
 	// if the inclusion proof verification failed, return EXCLUDED.
 	//

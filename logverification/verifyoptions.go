@@ -30,7 +30,7 @@ func WithMassifHeight(massifHeight uint8) VerifyOption {
 // ParseOptions parses the given options into a VerifyOptions struct
 func ParseOptions(options ...VerifyOption) VerifyOptions {
 	verifyOptions := VerifyOptions{
-		massifHeight: defaultMassifHeight, // set the default massif height first
+		massifHeight: DefaultMassifHeight, // set the default massif height first
 	}
 
 	for _, option := range options {
