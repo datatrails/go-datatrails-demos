@@ -3,7 +3,6 @@ package logverification
 import (
 	"context"
 	"crypto/ecdsa"
-	"errors"
 	"fmt"
 	"hash"
 
@@ -50,7 +49,7 @@ func VerifySignature(
 
 	signedStateNow.Payload, err = codec.MarshalCBOR(logStateNow)
 	if err != nil {
-		return nil, errors.New("error")
+		return nil, fmt.Errorf("VerifyConsistency failed: unable to cbor encode log state: %w", err)
 	}
 
 	signatureVerificationError := signedStateNow.VerifyWithPublicKey(&verificationKey, nil)
