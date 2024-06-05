@@ -52,7 +52,7 @@ func VerifyConsistency(
 
 	// We construct a proof of consistency between logStateA and logStateB.
 	//  This will be a proof that logStateB derives from logStateA.
-	consistencyProof, err := mmr.IndexConsistencyProof(logStateA.MMRSize, logStateB.MMRSize, &massifContextB, hasher)
+	consistencyProof, err := mmr.IndexConsistencyProof(logStateA.MMRSize, logStateB.MMRSize, massifContextB, hasher)
 	if err != nil {
 		return false, fmt.Errorf("VerifyConsistency failed: unable to generate consistency proof: %w", err)
 	}
@@ -66,7 +66,7 @@ func VerifyConsistency(
 	logPeaksA := mmr.Peaks(logStateA.MMRSize)
 
 	// Get the hashes of all of the peaks.
-	logPeakHashesA, err := mmr.PeakBagRHS(&massifContextA, hasher, 0, logPeaksA)
+	logPeakHashesA, err := mmr.PeakBagRHS(massifContextA, hasher, 0, logPeaksA)
 	if err != nil {
 		return false, errors.New("error")
 	}
