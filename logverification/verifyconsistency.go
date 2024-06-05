@@ -39,23 +39,13 @@ func VerifyConsistency(
 	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
 
 	// last massif in the merkle log for log state A
-	massifIndexA, err := massifs.MassifIndexFromMMRIndex(DefaultMassifHeight, logStateA.MMRSize-1)
-	if err != nil {
-		return false, err
-	}
-
-	massifContextA, err := massifReader.GetMassif(ctx, tenantID, massifIndexA)
+	massifContextA, err := Massif(logStateA.MMRSize-1, massifReader, tenantID, DefaultMassifHeight)
 	if err != nil {
 		return false, fmt.Errorf("VerifyConsistency failed: unable to get the last massif for log state A: %w", err)
 	}
 
 	// last massif in the merkle log for log state B
-	massifIndexB, err := massifs.MassifIndexFromMMRIndex(DefaultMassifHeight, logStateB.MMRSize-1)
-	if err != nil {
-		return false, err
-	}
-
-	massifContextB, err := massifReader.GetMassif(ctx, tenantID, massifIndexB)
+	massifContextB, err := Massif(logStateB.MMRSize-1, massifReader, tenantID, DefaultMassifHeight)
 	if err != nil {
 		return false, fmt.Errorf("VerifyConsistency failed: unable to get the last massif for log state B: %w", err)
 	}
