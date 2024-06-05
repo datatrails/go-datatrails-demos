@@ -13,7 +13,7 @@ import (
 //	against the immutable merkle log, aquired using the given reader.
 //
 // Returns true if the event is found to be on the log, otherwise false.
-func VerifyEvent(reader azblob.Reader, eventJSON []byte, options ...VerifyOption) (bool, error) {
+func VerifyEvent(reader azblob.Reader, eventJSON []byte, options ...MassifOption) (bool, error) {
 
 	massif, err := MassifFromEvent(eventJSON, reader, options...)
 
