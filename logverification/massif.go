@@ -55,7 +55,7 @@ func Massif(mmrIndex uint64, massifReader massifs.MassifReader, tenantId string,
 //	defined by the azblob configuration.
 func MassifFromEvent(eventJson []byte, reader azblob.Reader, options ...MassifOption) (*massifs.MassifContext, error) {
 
-	verifyOptions := ParseOptions(options...)
+	massifOptions := ParseMassifOptions(options...)
 
 	// 1. get the massif (blob) index from the merkleLogEntry on the event
 	merkleLogEntry, err := MerklelogEntry(eventJson)
@@ -63,11 +63,11 @@ func MassifFromEvent(eventJson []byte, reader azblob.Reader, options ...MassifOp
 		return nil, err
 	}
 
-	massifHeight := verifyOptions.massifHeight
+	massifHeight := massifOptions.massifHeight
 
 	// if tenant ID is not supplied
 	//  we should find it based on the given eventJson
-	tenantId := verifyOptions.tenantId
+	tenantId := massifOptions.tenantId
 	if tenantId == "" {
 		tenantId, err = TenantIdentity(eventJson)
 		if err != nil {
