@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"crypto/sha256"
+	"fmt"
+	"os"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-demos/logverification"
@@ -88,6 +90,12 @@ func ConsistencyDemo() (verified bool, err error) {
 
 func main() {
 
-	ConsistencyDemo()
+	verified, err := ConsistencyDemo()
 
+	if err != nil {
+		fmt.Printf("Failed to verify the consistency of the two log states: %v", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Two log state verification consistency is: %v\n", verified)
 }
