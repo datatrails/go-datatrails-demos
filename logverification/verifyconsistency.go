@@ -9,6 +9,7 @@ import (
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-common/logger"
+	"github.com/datatrails/go-datatrails-demos/logverification"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 	"github.com/datatrails/go-datatrails-merklelog/mmr"
 )
@@ -39,13 +40,23 @@ func VerifyConsistency(
 	massifReader := massifs.NewMassifReader(logger.Sugar, reader)
 
 	// last massif in the merkle log for log state A
-	massifContextA, err := massifReader.GetMassif(ctx, tenantID, logStateA.MMRSize-1)
+	massifIndexA, err := massifs.MassifIndexFromMMRIndex(logverification.DefaultMassifHeight, logStateA.MMRSize-1)
+	if err != nil {
+		return false, err
+	}
+
+	massifContextA, err := massifReader.GetMassif(ctx, tenantID, massifIndexA)
 	if err != nil {
 		return false, fmt.Errorf("VerifyConsistency failed: unable to get the last massif for log state A: %w", err)
 	}
 
 	// last massif in the merkle log for log state B
-	massifContextB, err := massifReader.GetMassif(ctx, tenantID, logStateB.MMRSize-1)
+	massifIndexB, err := massifs.MassifIndexFromMMRIndex(logverification.DefaultMassifHeight, logStateB.MMRSize-1)
+	if err != nil {
+		return false, err
+	}
+
+	massifContextB, err := massifReader.GetMassif(ctx, tenantID, massifIndexB)
 	if err != nil {
 		return false, fmt.Errorf("VerifyConsistency failed: unable to get the last massif for log state B: %w", err)
 	}
