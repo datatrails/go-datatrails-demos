@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
-	"github.com/datatrails/go-datatrails-demos/logverification"
+	"github.com/datatrails/go-datatrails-logverification/logverification"
 )
 
 /**
