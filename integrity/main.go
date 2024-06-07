@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
-	"github.com/datatrails/go-datatrails-demos/logverification"
+	"github.com/datatrails/go-datatrails-logverification/logverification"
 )
 
 /**
@@ -98,7 +98,7 @@ func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 	}
 
 	// now verify the public event is in the merklelog
-	return logverification.VerifyEvent(reader, []byte(eventNoPublicPrefix), logverification.WithTenantId(publicTenantID))
+	return logverification.VerifyEvent(reader, []byte(eventNoPublicPrefix), logverification.WithMassifTenantId(publicTenantID))
 
 }
 

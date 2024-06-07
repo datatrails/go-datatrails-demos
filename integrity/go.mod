@@ -2,12 +2,12 @@ module github.com/datatrails/go-datatrails-demos/integrity
 
 go 1.22
 
-require (
-	github.com/datatrails/go-datatrails-common v0.16.1
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.3
-)
+require github.com/datatrails/go-datatrails-common v0.16.1
 
-require github.com/stretchr/testify v1.9.0
+require (
+	github.com/datatrails/go-datatrails-logverification v0.1.2
+	github.com/stretchr/testify v1.9.0
+)
 
 require (
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
