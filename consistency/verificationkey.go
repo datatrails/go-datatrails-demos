@@ -25,7 +25,7 @@ func VerificationKeyFromFile() (*ecdsa.PublicKey, error) {
 		return nil, err
 	}
 
-	verificationKeyPemblock, _ := pem.Decode([]byte(verificationKeyPem))
+	verificationKeyPemblock, _ := pem.Decode(verificationKeyPem)
 	parseResult, err := x509.ParsePKIXPublicKey(verificationKeyPemblock.Bytes)
 	if err != nil {
 		return nil, err
