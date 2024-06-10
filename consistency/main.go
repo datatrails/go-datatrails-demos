@@ -82,7 +82,7 @@ func ConsistencyDemo() (verified bool, err error) {
 	// The second log state is taken from a later point in time when the above event, as well as the following event is on the log:
 	// https://app.datatrails.ai/archivist/publicassets/fe022486-3272-4d44-aab5-765a37c17b85/events/3e7a16dd-01d6-44f5-870d-abb9c56d154b
 	//
-	// We want to make sure that the second log state is appended from the first
+	// We want to make sure that the second log state continues to include all the entries from the earlier log state, and includes them in exactly the same place
 
 	return logverification.VerifyConsistency(context.Background(), hasher, reader, publicTenantID, existingLogState, logState)
 
