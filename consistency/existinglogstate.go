@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/datatrails/go-datatrails-common/cose"
-	"github.com/datatrails/go-datatrails-demos/logverification"
+	"github.com/datatrails/go-datatrails-logverification/logverification"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 )
 

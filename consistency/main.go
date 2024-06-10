@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
-	"github.com/datatrails/go-datatrails-demos/logverification"
+	"github.com/datatrails/go-datatrails-logverification/logverification"
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 )
 
@@ -45,10 +45,8 @@ func ConsistencyDemo() (verified bool, err error) {
 		return false, err
 	}
 
-	massifIndex, err := massifs.MassifIndexFromMMRIndex(logverification.DefaultMassifHeight, newStateMMRIndex)
-	if err != nil {
-		return false, err
-	}
+	massifIndex := massifs.MassifIndexFromMMRIndex(logverification.DefaultMassifHeight, newStateMMRIndex)
+
 	signedState, err := logverification.SignedLogState(
 		context.Background(), reader, hasher, codec, publicTenantID,
 		massifIndex,

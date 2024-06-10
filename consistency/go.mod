@@ -6,8 +6,8 @@ require github.com/stretchr/testify v1.9.0
 
 require (
 	github.com/datatrails/go-datatrails-common v0.16.1
-	github.com/datatrails/go-datatrails-demos/logverification v0.0.6
-	github.com/datatrails/go-datatrails-merklelog/massifs v0.0.7
+	github.com/datatrails/go-datatrails-logverification v0.1.3
+	github.com/datatrails/go-datatrails-merklelog/massifs v0.0.10
 )
 
 require (
