@@ -13,7 +13,7 @@ import (
 
 func ConsistencyDemo() (verified bool, err error) {
 
-	// First we need to get the existing signed log state we saved earlier.
+	// First we need to get the existing signed log state from a trusted source, one we saved earlier.
 	//
 	// The log state saved is from the massif that contains an event for the breast cancer diagnosing AI model sample.
 	// The event can be found here: https://app.datatrails.ai/archivist/publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/9a192afe-9253-44d7-8585-c48f237f2134
@@ -27,7 +27,7 @@ func ConsistencyDemo() (verified bool, err error) {
 		return false, err
 	}
 
-	// Now we need to get a more uptodate log state based on an event created some time after
+	// Now we get a future log state and confirm that our earlier event continues to be consistently recorded.
 	//  the existing signed log state.
 	//
 	// The event we are basing the newer log state on is:
@@ -82,7 +82,7 @@ func ConsistencyDemo() (verified bool, err error) {
 	// The second log state is taken from a later point in time when the above event, as well as the following event is on the log:
 	// https://app.datatrails.ai/archivist/publicassets/fe022486-3272-4d44-aab5-765a37c17b85/events/3e7a16dd-01d6-44f5-870d-abb9c56d154b
 	//
-	// We want to make sure that the second log state is appended from the first
+	// We want to make sure that the second log state continues to include all the entries from the earlier log state, and includes them in exactly the same place
 
 	return logverification.VerifyConsistency(context.Background(), hasher, reader, publicTenantID, existingLogState, logState)
 
