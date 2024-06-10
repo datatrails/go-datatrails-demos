@@ -13,7 +13,7 @@ import (
 
 func ConsistencyDemo() (verified bool, err error) {
 
-	// First we need to get the existing signed log state we saved earlier.
+	// First we need to get the existing signed log state from a trusted source, one we saved earlier.
 	//
 	// The log state saved is from the massif that contains an event for the breast cancer diagnosing AI model sample.
 	// The event can be found here: https://app.datatrails.ai/archivist/publicassets/3ea5aca3-da02-4bae-b6d0-85a5ab586ed6/events/9a192afe-9253-44d7-8585-c48f237f2134
