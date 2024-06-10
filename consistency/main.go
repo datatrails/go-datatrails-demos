@@ -27,7 +27,7 @@ func ConsistencyDemo() (verified bool, err error) {
 		return false, err
 	}
 
-	// Now we need to get a more uptodate log state based on an event created some time after
+	// Now we get a future log state and confirm that our earlier event continues to be consistently recorded.
 	//  the existing signed log state.
 	//
 	// The event we are basing the newer log state on is:
