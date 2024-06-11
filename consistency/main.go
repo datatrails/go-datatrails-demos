@@ -11,6 +11,7 @@ import (
 	"github.com/datatrails/go-datatrails-merklelog/massifs"
 )
 
+// ConsistencyDemo that a future log state is consistent with a previous signed log state.
 func ConsistencyDemo() (verified bool, err error) {
 
 	// First we need to get the existing signed log state from a trusted source, one we saved earlier.

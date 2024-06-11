@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(t *testing.T) {
+func TestConsistencyDemo(t *testing.T) {
 
 	verified, err := ConsistencyDemo()
 
