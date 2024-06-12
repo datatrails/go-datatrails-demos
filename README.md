@@ -73,3 +73,34 @@ If you want to run the demo directly with golang from the root of the repo:
 cd completeness
 go run .
 ```
+
+## Consistency Demo
+
+The consistency demo will verify a future log state continues to be consistently recorded based on
+an existing signed log state.
+
+### Docker Demo
+To run the consistency demo with docker:
+
+```
+docker run -v ./consistency:/usr/src/myapp -w /usr/src/myapp  golang:1.22-alpine go run .
+```
+
+Where the docker command is run from the root of the repo.
+
+### Task Demo
+
+To run the demo with a task (https://taskfile.dev/installation/) rune:
+
+```
+task demos:consistency
+```
+
+### Go Demo
+
+If you want to run the demo directly with golang from the root of the repo:
+
+```
+cd consistency
+go run .
+```

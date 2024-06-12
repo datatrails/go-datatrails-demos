@@ -26,3 +26,11 @@ tasks:
       - cmd: |
           
           go run .
+
+  consistency:
+    desc: "run the consistency demo"
+    dir: ../consistency
+    cmds:
+      - cmd: |
+          
+          go run .
