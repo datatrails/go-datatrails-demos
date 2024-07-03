@@ -1,8 +1,8 @@
 # go-datatrails-demos
 
-## Integrity Demo
+## Inclusion Demo
 
-The integrity demo will verify the integrity of a datatrails event.
+The inclusion demo will verify the inclusion of a datatrails event.
 
 This is achieved by creating an inclusion proof for that event and
 then verifying the inclusion proof against the merkle log.
@@ -11,10 +11,10 @@ If the inclusion proof is verified successfully, we can say that the
 datatrails event is included on the merkle log.
 
 ### Docker Demo
-To run the integrity demo with docker:
+To run the inclusion demo with docker:
 
 ```
-docker run -v ./integrity:/usr/src/myapp -w /usr/src/myapp  golang:1.22-alpine go run .
+docker run -v ./inclusion:/usr/src/myapp -w /usr/src/myapp  golang:1.22-alpine go run .
 ```
 
 Where the docker command is run from the root of the repo.
@@ -24,7 +24,7 @@ Where the docker command is run from the root of the repo.
 To run the demo with a task (https://taskfile.dev/installation/) rune:
 
 ```
-task demos:integrity
+task demos:inclusion
 ```
 
 ### Go Demo
@@ -32,13 +32,13 @@ task demos:integrity
 If you want to run the demo directly with golang from the root of the repo:
 
 ```
-cd integrity
+cd inclusion
 go run .
 ```
 
 ## Completeness Demo
 
-The completenesss demo will verify the integrity of a list of datatrails events.
+The completenesss demo will verify the inclusion of a list of datatrails events.
 
 This is achieved by checking that **ONLY** the events in the list exist on the log within a range
 starting from the first event in the list, ending at the last event in the list.

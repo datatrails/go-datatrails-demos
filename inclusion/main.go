@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-logverification/logverification"
 )
 
 /**
- * Tests the integrity of a datatrails event.
+ * Tests the inclusion of a datatrails event.
  *
  * This is achieved by creating an inclusion proof of the event,
  *  then verifying the inclusion proof.
@@ -84,12 +83,8 @@ const (
 	url       = "https://app.datatrails.ai/verifiabledata"
 )
 
-// IntegrityDemo of a public datatrails event
-func IntegrityDemo(eventJson []byte) (verified bool, err error) {
-
-	// first we need to strip the 'public' prefix from all identity and assetIdentity fields
-	//  as the hashing schema does not support public prefixing
-	eventNoPublicPrefix := strings.ReplaceAll(event, "publicassets/", "assets/")
+// InclusionDemo of a public datatrails event
+func InclusionDemo(eventJson []byte) (verified bool, err error) {
 
 	// then create the merklelog reader
 	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
@@ -97,15 +92,20 @@ func IntegrityDemo(eventJson []byte) (verified bool, err error) {
 		return false, err
 	}
 
+	verifiableEvent, err := logverification.NewVerifiableEvent(eventJson)
+	if err != nil {
+		return false, err
+	}
+
 	// now verify the public event is in the merklelog
-	return logverification.VerifyEvent(reader, []byte(eventNoPublicPrefix), logverification.WithMassifTenantId(publicTenantID))
+	return logverification.VerifyEvent(reader, *verifiableEvent, logverification.WithMassifTenantId(publicTenantID))
 
 }
 
-// Demo of the integrity of a public datatrails event
+// Demo of the inclusion of a public datatrails event
 func main() {
 
-	verified, err := IntegrityDemo([]byte(event))
+	verified, err := InclusionDemo([]byte(event))
 	if err != nil {
 		fmt.Printf("\nerror: %v\n", err)
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/datatrails/go-datatrails-common/azblob"
 	"github.com/datatrails/go-datatrails-logverification/logverification"
@@ -19,11 +18,7 @@ import (
  */
 
 // CompletenessDemo of a list of public datatrails events
-func CompletenessDemo(eventJson []byte) (omittedEvents []uint64, err error) {
-
-	// first we need to strip the 'public' prefix from all identity and assetIdentity fields
-	//  as the hashing schema does not support public prefixing
-	events := strings.ReplaceAll(eventList, "publicassets/", "assets/")
+func CompletenessDemo(eventsJson []byte) (omittedEvents []uint64, err error) {
 
 	// then create the merklelog reader
 	reader, err := azblob.NewReaderNoAuth(url, azblob.WithContainer(container))
@@ -31,8 +26,13 @@ func CompletenessDemo(eventJson []byte) (omittedEvents []uint64, err error) {
 		return nil, err
 	}
 
+	verifiableEvents, err := logverification.NewVerifiableEvents(eventsJson)
+	if err != nil {
+		return nil, err
+	}
+
 	// now verify the public event is in the merklelog
-	return logverification.VerifyList(reader, []byte(events), logverification.WithTenantId(publicTenantID))
+	return logverification.VerifyList(reader, verifiableEvents, logverification.WithTenantId(publicTenantID))
 
 }
 
