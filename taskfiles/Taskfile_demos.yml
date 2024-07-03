@@ -11,9 +11,9 @@ env_build: &env_build
 
 tasks:
 
-  integrity:
+  inclusion:
     desc: "run the intgrity demo"
-    dir: ../integrity
+    dir: ../inclusion
     cmds:
       - cmd: |
           
